@@ -1,0 +1,7 @@
+{
+    "C0112 - Empty function docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,18 @@\n+\"\"\"\n+Module docstring: This module contains a function for performing back-and-forth operations.\n+\"\"\"\n+\n def do_back(front_filename, shift_x, shift_y, back_filename):\n+    \"\"\"\n+    Performs back-and-forth operation between two files.\n+\n+    Args:\n+        front_filename (str): The filename of the front file.\n+        shift_x (int): The x-coordinate to shift by.\n+        shift_y (int): The y-coordinate to shift by.\n+        back_filename (str): The filename of the back file.\n+\n+    Returns:\n+        None\n+    \"\"\"\n+    # Your original function code remains unchanged here...",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

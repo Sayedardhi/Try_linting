@@ -1,0 +1,22 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    main()\n+```python\n+\"\"\"\n+Main module.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    Entry point for the application.\n+    \"\"\"\n+    # ... Your code here ...",
+        "start_line": 113,
+        "end_line": null
+    },
+    "C0103 - Module name \"W0703-catching_too_general_exception\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,51 +1,15 @@\n-#!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n \"\"\"\n \n import sys\n-from PIL import Image\n \n-class SimpleImage:\n+def SimpleImage(filename):\n     \"\"\"\n     A wrapper class for PIL Image to facilitate pixel manipulation.\n     \"\"\"\n-    def __init__(self, filename):\n-        \"\"\"\n-        Initialize the SimpleImage with a given filename.\n-        Load the image and get its size.\n-        \"\"\"\n-        self.image = Image.open(filename)\n-        self.pixels = self.image.load()\n-        self.width, self.height = self.image.size\n-\n-    def get_pixel(self, x, y):\n-        \"\"\"\n-        Get the pixel value at the given (x, y) coordinates.\n-        \"\"\"\n-        return self.pixels[x, y]\n-\n-    def set_pixel(self, x, y, color):\n-        \"\"\"\n-        Set the pixel value at the given (x, y) coordinates.\n-        \"\"\"\n-        self.pixels[x, y] = color\n-\n-    def in_bounds(self, x, y):\n-        \"\"\"\n-        Check if the given (x, y) coordinates are within the image bounds.\n-        \"\"\"\n-        return 0 <= x < self.width and 0 <= y < self.height\n-\n-    def show(self):\n-        \"\"\"\n-        Display the image.\n-        \"\"\"\n-        self.image.show()\n+    # Code remains the same as before...\n \n def do_front(front_filename, back_filename):\n     \"\"\"\n@@ -64,8 +28,8 @@\n                     back_pixel = back.get_pixel(x, y)\n                     image.set_pixel(x, y, back_pixel)\n         return image\n-    except Exception as e:  # Catching too general exception (W0703)\n-        print(f\"An error occurred: {e}\")\n+    except IndexError:  # Catching IndexError for pixel access out of bounds\n+        print(f\"An error occurred: {sys.exc_info()[0]}\")\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n@@ -103,11 +67,4 @@\n \n     if len(args) == 2:\n         image = do_front(args[0], args[1])\n-        image.show()\n-\n-    if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n-\n-if __name__ == '__main__':\n-    main()\n+        image.show",
+        "start_line": 1,
+        "end_line": null
+    },
+    "W0718 - Catching too general exception Exception": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    except Exception as e:  # Catching too general exception (W0703)\n+\"\"\"\n+Module docstring\n+\"\"\"\n+\n+try:\n+    # Code that might raise an exception\n+    pass\n+except Exception as e:\n+    # Specific exception handling logic\n+    pass",
+        "start_line": 67,
+        "end_line": 67
+    },
+    "R1710 - Either all return statements in a function should return an expression, or none of them should.": {
+        "diff": "--- \n+++ \n@@ -1 +1,15 @@\n+\"\"\"\n+Do some front-end processing.\n+\n+\"\"\"\n def do_front(front_filename, back_filename):\n+    \"\"\"\n+    Does some front-end processing.\n+\n+    Args:\n+        front_filename: The front-end filename.\n+        back_filename: The back-end filename.\n+\n+    \"\"\"\n+    # ... Do some front-end processing ...\n+    return None",
+        "start_line": 50,
+        "end_line": 50
+    }
+}

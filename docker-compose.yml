@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  linting_service:
+    build: .
+    volumes:
+      - .:/app
+    command: python scripts/run_linter.py https://github.com/Sayedardhi/violations

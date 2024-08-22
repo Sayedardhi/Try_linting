@@ -1,0 +1,7 @@
+{
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,17 @@\n+\"\"\"\n+This module contains functions for working with front and back files.\n+\"\"\"\n+\n def do_front(front_filename, back_filename):\n+    \"\"\"\n+    This function takes two filenames as input: one for the front file and one for the back file.\n+    \n+    It is assumed that this function will be used to perform some operation on these files.\n+    \n+    Parameters:\n+        front_filename (str): The filename of the front file.\n+        back_filename (str): The filename of the back file.\n+    \n+    Returns:\n+        None\n+    \"\"\"",
+        "start_line": 52,
+        "end_line": 52
+    }
+}

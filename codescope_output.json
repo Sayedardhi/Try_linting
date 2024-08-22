@@ -1,0 +1,161 @@
+
+Project Structure:
+cloned_repo/
+    no_cls.py
+    violations/
+        class_method_def/
+            no_cls.py
+            metaclass_method_no_mcs.py
+            metaclass_class_method_no_arg.py
+        documentation/
+            missing_docstring.py
+            empty_docstring.py
+        naming_conventions/
+            black_listed_name.py
+            invalid_name.py
+
+---
+
+Key Functions and Classes:
+
+In cloned_repo/no_cls.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+  Method: `from_size`
+  Method: `invalid_class_method`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/class_method_def/no_cls.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+  Method: `from_size`
+  Method: `invalid_class_method`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/class_method_def/metaclass_method_no_mcs.py:
+
+Class: `Meta`
+  Method: `__new__`
+  Method: `create_instance`
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/class_method_def/metaclass_class_method_no_arg.py:
+
+Class: `Meta`
+  Method: `__new__`
+  Method: `create_instance`
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/documentation/missing_docstring.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/documentation/empty_docstring.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/naming_conventions/black_listed_name.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `do_back`
+
+Function: `main`
+
+
+In cloned_repo/violations/naming_conventions/invalid_name.py:
+
+Class: `SimpleImage`
+  Method: `__init__`
+  Method: `get_pixel`
+  Method: `set_pixel`
+  Method: `in_bounds`
+  Method: `show`
+
+Function: `do_front`
+
+Function: `doBack`
+
+Function: `main`
+
+
+---

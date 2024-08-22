@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,9 @@\n-    main()\n+\"\"\"\n+main module: This module contains the main entry point of the program.\n+\n+Functions:\n+    main(): The main function, which is called when the script is run.\n+\"\"\"\n+\n+def main():\n+    print()",
+        "start_line": 112,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0701-raising_improper_types\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,5 +1,4 @@\n #!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n@@ -9,6 +8,9 @@\n \n import sys\n from PIL import Image\n+\n+# module docstring\n+\"\"\"A Python script for bluescreen manipulation.\"\"\"\n \n class SimpleImage:\n     \"\"\"\n@@ -62,14 +64,12 @@\n             if pixel[2] > 2 * max(pixel[0], pixel[1]):\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n-    if image.width == 0:\n-        raise \"Width is zero\"  # Raising improper types (E0702)\n     return image\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n     Back strategy: loop over image,\n-    detect *non-blue* pixels.\n+    detect non-blue pixels.\n     Copy those pixels to back, shifted by shift_x, shift_y.\n     Pixels which fall outside of the background are ignored.\n     Return changed back image.",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0702 - Raising str while only classes or instances are allowed": {
+        "diff": "--- \n+++ \n@@ -1 +1,4 @@\n-        raise \"Width is zero\"  # Raising improper types (E0702)\n+from exceptions import ValueError  # Correctly import the ValueError exception\n+\n+def my_function():\n+    raise ValueError(\"Width is zero\")  # Raising a proper exception type",
+        "start_line": 66,
+        "end_line": 66
+    }
+}

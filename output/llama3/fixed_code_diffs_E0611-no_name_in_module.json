@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0611-no_name_in_module, line 43)'": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,25 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+Module documentation: This module contains functions for image processing and manipulation.\n+\"\"\"\n+import sys\n+\n+class Image:\n+    def __init__(self, width, height):\n+        self.width = width\n+        self.height = height\n+        self.image = None\n \n     def show(self):\n         \"\"\"\n         Display the image.\n         \"\"\"\n         self.image.show()\n+\n+def return_condition(x, y):\n+    \"\"\"\n+    Return True if x and y are within the image boundaries, False otherwise.\n+    \"\"\"\n+    return 0 <= x < self.width and 0 <= y < self.height\n \n def do_front(front_filename, back_filename):\n     \"\"\"\n@@ -26,7 +41,7 @@\n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n     Back strategy: loop over image,\n-    detect *non-blue* pixels.\n+    detect non-blue pixels.\n     Copy those pixels to back, shifted by shift_x, shift_y.\n     Pixels which fall outside of the background are ignored.\n     Return changed back image.",
+        "start_line": 43,
+        "end_line": null
+    }
+}

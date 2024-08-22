@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0603-undefined_variable_name_in_all, line 44)'": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,28 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+SimpleImage module\n \n-    def show(self):\n-        \"\"\"\n-        Display the image.\n-        \"\"\"\n-        self.image.show()\n+\"\"\"\n+This module contains utilities for working with images.\n+\"\"\"\n+\n+def in_bounds(x, y):\n+    \"\"\"\n+    Check if pixel coordinates are within the image bounds.\n+\n+    Args:\n+        x (int): The x coordinate of the pixel.\n+        y (int): The y coordinate of the pixel.\n+\n+    Returns:\n+        bool: True if the pixel is within bounds, False otherwise.\n+    \"\"\"\n+    return 0 <= x < width and 0 <= y < height\n+\n+def show(image):\n+    \"\"\"\n+    Display the image.\n+    \"\"\"\n+    image.image.show()\n \n def do_front(front_filename, back_filename):\n     \"\"\"\n@@ -47,6 +65,8 @@\n     \"\"\"\n     Main function to handle argument parsing and strategy execution.\n     \"\"\"\n+    import sys\n+\n     args = sys.argv[1:]\n \n     if len(args) != 2 and len(args) != 4:",
+        "start_line": 44,
+        "end_line": null
+    }
+}

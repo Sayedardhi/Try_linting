@@ -1,0 +1,7 @@
+{
+    "C0103 - Function name \"doBack\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1 +1,6 @@\n-def doBack(front_filename, shift_x, shift_y, back_filename):\n+\n+\n+            \"\"\"\n+        )\n+\n+        # TODO: Fill this out!",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

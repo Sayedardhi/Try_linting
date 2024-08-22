@@ -1,0 +1,7 @@
+{
+    "C0204 - Metaclass class method create_instance should have 'mcs' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,22 @@\n-    def create_instance(not_cls, cls, filename):\n+\"\"\"\n+This module contains a function to create an instance of a class.\n+It takes three parameters: not_cls (the class that should NOT be instantiated),\n+cls (the class that should be instantiated), and filename (the name of the file).\n+\"\"\"\n+\n+def create_instance(not_cls, cls, filename):\n+    \"\"\"\n+    Create an instance of the given class.\n+\n+    Args:\n+        not_cls (class): The class that should NOT be instantiated.\n+        cls (class): The class that should be instantiated.\n+        filename (str): The name of the file where this function is being used.\n+\n+    Returns:\n+        An instance of the given class.\n+    \"\"\"\n+    if not_cls is cls:  # Check if not_cls and cls are the same\n+        raise ValueError(f\"Cannot create instance of {cls.__name__} as it's in the 'not' list.\")\n+    \n+    return cls()",
+        "start_line": 25,
+        "end_line": 25
+    }
+}

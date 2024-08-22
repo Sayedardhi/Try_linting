@@ -1,0 +1,22 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    main()\n+```python\n+\"\"\"\n+main.py\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This is the main function.\n+    \"\"\"\n+    pass",
+        "start_line": 113,
+        "end_line": null
+    },
+    "C0103 - Module name \"W0702-no_exception_types_specified\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,6 @@\n-#!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n \"\"\"\n \n import sys\n@@ -64,8 +60,8 @@\n                     back_pixel = back.get_pixel(x, y)\n                     image.set_pixel(x, y, back_pixel)\n         return image\n-    except:  # No exception type(s) specified (W0702)\n-        print(\"An error occurred\")\n+    except IndexError:  # W0702-no_exception_types_specified\n+        print(\"An error occurred while processing image files.\")\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n@@ -79,35 +75,4 @@\n     back = SimpleImage(back_filename)\n     for y in range(image.height):\n         for x in range(image.width):\n-            pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n-                dest_x = x + shift_x\n-                dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n-                    back.set_pixel(dest_x, dest_y, pixel)\n-    return back\n-\n-def main():\n-    \"\"\"\n-    Main function to handle argument parsing and strategy execution.\n-    \"\"\"\n-    args = sys.argv[1:]\n-\n-    if len(args) != 2 and len(args) != 4:\n-        print('Args not recognized. Usage:')\n-        print('2 args for front strategy:')\n-        print('  front-image back-image')\n-        print('4 args for back strategy:')\n-        print('  front-image shift-x shift-y back-image')\n-        return\n-\n-    if len(args) == 2:\n-        image = do_front(args[0], args[1])\n-        image.show()\n-\n-    if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n-\n-if __name__ == '__main__':\n-    main()\n+            pixel = image.",
+        "start_line": 1,
+        "end_line": null
+    },
+    "W0702 - No exception type(s) specified": {
+        "diff": "--- \n+++ \n@@ -1,2 +1,7 @@\n-    except:  # No exception type(s) specified (W0702)\n-        print(\"An error occurred\")\n+```python\n+def handle_error():\n+    \"\"\"Handle potential errors during processing.\"\"\"\n+    try:\n+        # Code that may raise an exception\n+    except Exception as e:\n+        print(\"An error occurred: {}\".format(e))",
+        "start_line": 67,
+        "end_line": 68
+    },
+    "R1710 - Either all return statements in a function should return an expression, or none of them should.": {
+        "diff": "--- \n+++ \n@@ -1 +1,14 @@\n+\"\"\"\n+Do something with the front and back files.\n+\"\"\"\n+\n def do_front(front_filename, back_filename):\n+    \"\"\"\n+    Do something with the front and back files.\n+\n+    Args:\n+        front_filename: The filename of the front file.\n+        back_filename: The filename of the back file.\n+    \"\"\"\n+    # ... Your code to process the files ...\n+    return None",
+        "start_line": 50,
+        "end_line": 50
+    }
+}

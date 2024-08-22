@@ -1,0 +1,7 @@
+{
+    "C0112 - Empty function docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,17 @@\n-def do_back(front_filename, shift_x, shift_y, back_filename):\n+\"\"\"\n+Back and forth file processing module\n+\"\"\"\n+\n+def do_back(front_filename: str, shift_x: int, shift_y: int, back_filename: str):\n+    \"\"\"\n+    Process two files in opposite directions.\n+\n+    Args:\n+        front_filename (str): The name of the file to be processed.\n+        shift_x (int): Shift X coordinate value.\n+        shift_y (int): Shift Y coordinate value.\n+        back_filename (str): The name of the file that will be processed after this function is called.\n+\n+    Returns:\n+        None\n+    \"\"\"",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

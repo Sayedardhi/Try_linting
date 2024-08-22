@@ -1,0 +1,7 @@
+{
+    "C0202 - Class method invalid_class_method should have 'cls' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,9 @@\n-    def invalid_class_method(not_cls, width, height):\n+def invalid_class_method(cls, width, height):\n+    \"\"\"\n+    This method should be a class method that takes 'cls' as its first argument.\n+    It's purpose is to provide [brief description of what this method does].\n+    :param cls: The class object.\n+    :param width: The width parameter.\n+    :param height: The height parameter.\n+    :return: [Return value if applicable]\n+    \"\"\"",
+        "start_line": 63,
+        "end_line": 63
+    }
+}

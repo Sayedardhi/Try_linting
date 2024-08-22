@@ -1,0 +1,7 @@
+{
+    "C0103 - Function name \"doBack\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1 +1,13 @@\n-def doBack(front_filename, shift_x, shift_y, back_filename):\n+def do_back(front_filename, shift_x, shift_y, back_filename):\n+    \"\"\"\n+    A description of what this function does.\n+\n+    Parameters:\n+        front_filename (str): The name of the file.\n+        shift_x (int): The x-coordinate to shift by.\n+        shift_y (int): The y-coordinate to shift by.\n+        back_filename (str): The name of the file.\n+\n+    Returns:\n+        None\n+    \"\"\"",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

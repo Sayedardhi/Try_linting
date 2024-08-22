@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0601-using_variable_before_assignment, line 42)'": {
+        "diff": "--- \n+++ \n@@ -1,11 +1,7 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+SimpleImage module\n \n-    def show(self):\n-        \"\"\"\n-        Display the image.\n-        \"\"\"\n-        self.image.show()\n-\n+\"\"\"\n def do_front(front_filename, back_filename):\n     \"\"\"\n     Front strategy: loop over front image,\n@@ -21,7 +17,6 @@\n             if pixel[2] > 2 * max(pixel[0], pixel[1]):\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n-    print(width)  # Using variable before assignment (E0601)\n     return image\n \n def do_back(front_filename, shift_x, shift_y, back_filename):",
+        "start_line": 42,
+        "end_line": null
+    }
+}

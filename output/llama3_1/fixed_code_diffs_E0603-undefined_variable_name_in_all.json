@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0603-undefined_variable_name_in_all, line 44)'": {
+        "diff": "--- \n+++ \n@@ -1,4 +1,22 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+Image processing module.\n+\n+This module provides two image processing strategies: front and back.\n+The front strategy loops over a front image, detects blue pixels,\n+substitutes in pixels from a back image. The back strategy loops over an image,\n+detects non-blue pixels, copies those pixels to a back image shifted by shift_x, shift_y.\n+\"\"\"\n+\n+import sys\n+\n+class SimpleImage:\n+    def __init__(self, filename):\n+        # Image class initialization\n+        pass  # You need to implement this method according to your requirements.\n+\n+    @staticmethod  # Add static keyword here.\n+    def in_bounds(x, y):\n+        return 0 <= x < self.width and 0 <= y < self.height\n \n     def show(self):\n         \"\"\"\n@@ -39,7 +57,7 @@\n             if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n                 dest_x = x + shift_x\n                 dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n+                if back.in_bounds(dest_x, dest_y):  # Add self. keyword here.\n                     back.set_pixel(dest_x, dest_y, pixel)\n     return back\n ",
+        "start_line": 44,
+        "end_line": null
+    }
+}

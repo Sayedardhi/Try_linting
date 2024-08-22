@@ -1,0 +1,22 @@
+{
+    "C0301 - Line too long (124/100)": {
+        "diff": "--- \n+++ \n@@ -1,5 +1,11 @@\n-        raise CustomException(\"Width is zero\")  # Raising a new style class which doesn\u2019t inherit from BaseException (E0710)\n-    return image\n+```python\n+\"\"\"\n+Back strategy: loop over image,\n+detect *non-blue* pixels.\n+Copy those pixels to back, shifted by shift_x, shift_y.\n+Pixels which fall outside of the background are ignored.\n+Return changed back image.\n+\"\"\"\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n@@ -21,13 +27,14 @@\n                     back.set_pixel(dest_x, dest_y, pixel)\n     return back\n \n+\n def main():\n     \"\"\"\n     Main function to handle argument parsing and strategy execution.\n     \"\"\"\n     args = sys.argv[1:]\n \n-    if len(args) != 2 and len(args) != 4:\n+    if len(args) not in [2, 4]:\n         print('Args not recognized. Usage:')\n         print('2 args for front strategy:')\n         print('  front-image back-image')",
+        "start_line": 71,
+        "end_line": null
+    },
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    main()\n+```python\n+\"\"\"\n+This is the main module.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This is the main function.\n+    \"\"\"\n+    pass",
+        "start_line": 117,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0710-raising_new_style_class\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,5 +1,3 @@\n-#!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n@@ -47,9 +45,9 @@\n         \"\"\"\n         self.image.show()\n \n-class CustomException:\n+class CustomException(Exception):\n     \"\"\"\n-    Custom exception class that doesn't inherit from BaseException.\n+    Custom exception class that inherits from Exception.\n     \"\"\"\n \n def do_front(front_filename, back_filename):\n@@ -68,7 +66,7 @@\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n     if image.width == 0:\n-        raise CustomException(\"Width is zero\")  # Raising a new style class which doesn\u2019t inherit from BaseException (E0710)\n+        raise CustomException(\"Width is zero\")\n     return image\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n@@ -76,42 +74,4 @@\n     Back strategy: loop over image,\n     detect *non-blue* pixels.\n     Copy those pixels to back, shifted by shift_x, shift_y.\n-    Pixels which fall outside of the background are ignored.\n-    Return changed back image.\n-    \"\"\"\n-    image = SimpleImage(front_filename)\n-    back = SimpleImage(back_filename)\n-    for y in range(image.height):\n-        for x in range(image.width):\n-            pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n-                dest_x = x + shift_x\n-                dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n-                    back.set_pixel(dest_x, dest_y, pixel)\n-    return back\n-\n-def main():\n-    \"\"\"\n-    Main function to handle argument parsing and strategy execution.\n-    \"\"\"\n-    args = sys.argv[1:]\n-\n-    if len(args) != 2 and len(args) != 4:\n-        print('Args not recognized. Usage:')\n-        print('2 args for front strategy:')\n-        print('  front-image back-image')\n-        print('4 args for back strategy:')\n-        print('  front-image shift-x shift-y back-image')\n-        return\n-\n-    if len(args) == 2:\n-        image = do_front(args[0], args[1])\n-        image.show()\n-\n-    if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n-\n-if __name__ == '__main__':\n-    main()\n+    Pixels which fall outside of the background are ignored",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0710 - Raising a new style class which doesn't inherit from BaseException": {
+        "diff": "--- \n+++ \n@@ -1 +1,12 @@\n-        raise CustomException(\"Width is zero\")  # Raising a new style class which doesn\u2019t inherit from BaseException (E0710)\n+\"\"\"\n+CustomException module\n+\"\"\"\n+\n+class CustomException(Exception):\n+    \"\"\"Custom exception class\"\"\"\n+\n+    def __init__(self, message):\n+        super().__init__(message)\n+\n+\n+raise CustomException(\"Width is zero\")",
+        "start_line": 71,
+        "end_line": 71
+    }
+}

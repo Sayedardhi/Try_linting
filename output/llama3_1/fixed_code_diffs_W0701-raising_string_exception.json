@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,4 @@\n-    main()\n+\"\"\"\n+This is a module that contains a main function.\n+\"\"\"\n+main()",
+        "start_line": 112,
+        "end_line": null
+    },
+    "C0103 - Module name \"W0701-raising_string_exception\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,8 @@\n #!/usr/bin/env python3\n-\n \"\"\"\n-Stanford Bluescreen Example\n-Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n+Module name \"W0701-raising_string_exception\" conforms to snake_case naming style.\n+This module shows front and back strategies for image manipulation.\n+The functions are mostly complete, missing only the key if-logic line.\n \"\"\"\n \n import sys\n@@ -60,10 +58,12 @@\n         for x in range(image.width):\n             pixel = image.get_pixel(x, y)\n             if pixel[2] > 2 * max(pixel[0], pixel[1]):\n-                back_pixel = back.get_pixel(x, y)\n-                image.set_pixel(x, y, back_pixel)\n+                # Fixing W0701-raising_string_exception by raising a proper exception\n+                raise ValueError(\"Width is zero\") \n+            back_pixel = back.get_pixel(x, y)\n+            image.set_pixel(x, y, back_pixel)\n     if image.width == 0:\n-        raise \"Width is zero\"  # Raising a string exception (W0701)\n+        raise ValueError(\"Width is zero\")\n     return image\n \n def do_back(front_filename, shift_x, shift_y, back_filename):",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0702 - Raising str while only classes or instances are allowed": {
+        "diff": "--- \n+++ \n@@ -1 +1,20 @@\n-        raise \"Width is zero\"  # Raising a string exception (W0701)\n+class BaseError(Exception):\n+    \"\"\"Base exception for custom errors.\"\"\"\n+\n+class InvalidWidth(BaseError):\n+    \"\"\"Raised when width is invalid.\"\"\"\n+\n+def some_function(width: int):\n+    \"\"\"\n+    This function does something.\n+\n+    Args:\n+        width (int): The width of something.\n+    \"\"\"\n+    if width == 0:\n+        raise InvalidWidth(\"Width is zero\")  # Raising an instance of the exception class\n+\n+# And at the top of your file, you can add a module docstring\n+\"\"\"\n+Module for some_function.\n+\"\"\"",
+        "start_line": 66,
+        "end_line": 66
+    }
+}

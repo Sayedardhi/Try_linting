@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0104-return_outside_function, line 42)'": {
+        "diff": "--- \n+++ \n@@ -1,11 +1,7 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+SimpleImage module\n \n-    def show(self):\n-        \"\"\"\n-        Display the image.\n-        \"\"\"\n-        self.image.show()\n-\n+\"\"\"\n def do_front(front_filename, back_filename):\n     \"\"\"\n     Front strategy: loop over front image,\n@@ -40,7 +36,7 @@\n                 dest_x = x + shift_x\n                 dest_y = y + shift_y\n                 if back.in_bounds(dest_x, dest_y):\n-                    return  # Return outside function (E0104)\n+                    return back\n     return back\n \n def main():",
+        "start_line": 42,
+        "end_line": null
+    }
+}

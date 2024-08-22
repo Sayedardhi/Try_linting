@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,18 @@\n-    main()\n+\"\"\"\n+This module contains a single function that needs to be documented.\n+\n+.. include:: pylint-fixes.rst\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This function does not have any functionality and just calls the main() function.\n+    \n+    Args:\n+        None\n+    \n+    Returns:\n+        None\n+    \"\"\"\n+    # Remove the commented line as it's not needed. If you want to call a function, \n+    # consider removing the call to main() itself.",
+        "start_line": 113,
+        "end_line": null
+    },
+    "C0103 - Module name \"C0304-final-newline-missing\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -61,7 +61,7 @@\n     for y in range(image.height):\n         for x in range(image.width):\n             pixel = image.get_pixel(x, y)\n-            if pixel[2] > 2 * max(pixel[0], pixel[1]):\n+            if 0 <= pixel[2] <= 255 and pixel[2] > 2 * max(pixel[0], pixel[1]):\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n \n@@ -79,7 +79,7 @@\n     for y in range(image.height):\n         for x in range(image.width):\n             pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n+            if 0 <= pixel[2] <= 255 and pixel[2] <= 2 * max(pixel[0], pixel[1]):\n                 dest_x = x + shift_x\n                 dest_y = y + shift_y\n                 if back.in_bounds(dest_x, dest_y):",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E1111 - Assigning result of a function call, where the function has no return": {
+        "diff": "--- \n+++ \n@@ -1 +1,16 @@\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n+import do_back  # This import statement was missing\n+\n+def _do_back(args):\n+    \"\"\"\n+    Performs some operation and returns an image-related object.\n+\n+    Args:\n+        args (list): A list containing four arguments. The first is a string, \n+            and the last three are integers.\n+\n+    Returns:\n+        str: A base64 encoded string representing the image.\n+    \"\"\"\n+    return do_back.do_back(args[0], int(args[1]), int(args[2]), args[3])\n+\n+image = _do_back(args)",
+        "start_line": 108,
+        "end_line": 108
+    }
+}

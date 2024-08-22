@@ -1,0 +1,7 @@
+{
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,2 @@\n def do_front(front_filename, back_filename):\n+    \"\"\"Docstring explaining what this function does\"\"\"",
+        "start_line": 52,
+        "end_line": 52
+    }
+}

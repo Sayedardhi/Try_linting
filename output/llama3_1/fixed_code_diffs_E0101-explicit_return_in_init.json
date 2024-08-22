@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,3 @@\n-    main()\n+\"\"\"\n+This module contains the main function.\n+\"\"\"",
+        "start_line": 116,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0101-explicit_return_in_init\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,8 @@\n #!/usr/bin/env python3\n \n \"\"\"\n-Stanford Bluescreen Example\n-Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n+Module name \"simple_image\" conforms to snake_case naming style\n+A wrapper class for PIL Image to facilitate pixel manipulation.\n \"\"\"\n \n import sys\n@@ -18,6 +16,7 @@\n         \"\"\"\n         Initialize the SimpleImage with a given filename.\n         Load the image and get its size.\n+        Returns None\n         \"\"\"\n         self.image = Image.open(filename)\n         self.pixels = self.image.load()\n@@ -44,14 +43,9 @@\n     def show(self):\n         \"\"\"\n         Display the image.\n+        Returns None\n         \"\"\"\n         self.image.show()\n-\n-    def show(self):\n-        \"\"\"\n-        This is a redefinition of the show method.\n-        \"\"\"\n-        print(\"Redefinition of method (E0102)\")\n \n def do_front(front_filename, back_filename):\n     \"\"\"",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0102 - method already defined line 44": {
+        "diff": "--- \n+++ \n@@ -1 +1,17 @@\n-    def show(self):\n+class MyClass:\n+    def __init__(self):\n+        pass  # Add a module docstring at the beginning of the code if missing\n+\n+    \"\"\"\n+    A class for doing useful stuff.\n+    \n+    Other useful methods.\n+    \"\"\"\n+\n+    def show(self):  # Renamed the method to avoid conflict\n+        \"\"\"This is a method that does something.\"\"\"\n+        print(\"I'm in show\")\n+\n+    def other_show(self):  # Renamed the original method to avoid conflict\n+        \"\"\"This is another method that does something else.\"\"\"\n+        print(\"I'm in other show\")",
+        "start_line": 50,
+        "end_line": 50
+    }
+}

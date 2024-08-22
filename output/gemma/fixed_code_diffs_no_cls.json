@@ -1,0 +1,7 @@
+{
+    "C0202 - Class method invalid_class_method should have 'cls' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,7 @@\n-    def invalid_class_method(not_cls, width, height):\n+\"\"\"\n+Module containing utility functions.\n+\"\"\"\n+\n+def invalid_class_method(cls, width, height):\n+    \"\"\"Invalid class method. Should not be used.\"\"\"\n+    pass",
+        "start_line": 63,
+        "end_line": 63
+    }
+}

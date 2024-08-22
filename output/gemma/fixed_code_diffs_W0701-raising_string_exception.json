@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,14 @@\n+```python\n+\"\"\"\n+This is the main module.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This is the main function.\n+    \"\"\"\n+    # Your code here.\n+    pass\n+\n+if __name__ == \"__main__\":\n     main()",
+        "start_line": 112,
+        "end_line": null
+    },
+    "C0103 - Module name \"W0701-raising_string_exception\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,19 +1,17 @@\n-#!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n \"\"\"\n \n import sys\n from PIL import Image\n \n+\n class SimpleImage:\n     \"\"\"\n     A wrapper class for PIL Image to facilitate pixel manipulation.\n     \"\"\"\n+\n     def __init__(self, filename):\n         \"\"\"\n         Initialize the SimpleImage with a given filename.\n@@ -47,6 +45,7 @@\n         \"\"\"\n         self.image.show()\n \n+\n def do_front(front_filename, back_filename):\n     \"\"\"\n     Front strategy: loop over front image,\n@@ -63,8 +62,9 @@\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n     if image.width == 0:\n-        raise \"Width is zero\"  # Raising a string exception (W0701)\n+        raise ValueError(\"Width is zero\")  # Changed to ValueError (W0701)\n     return image\n+\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n@@ -78,35 +78,5 @@\n     back = SimpleImage(back_filename)\n     for y in range(image.height):\n         for x in range(image.width):\n-            pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n-                dest_x = x + shift_x\n-                dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n-                    back.set_pixel(dest_x, dest_y, pixel)\n-    return back\n-\n-def main():\n-    \"\"\"\n-    Main function to handle argument parsing and strategy execution.\n-    \"\"\"\n-    args = sys.argv[1:]\n-\n-    if len(args) != 2 and len(args) != 4:\n-        print('Args not recognized. Usage:')\n-        print('2 args for front strategy:')\n-        print('  front-image back-image')\n-        print('4 args for back strategy:')\n-        print('  front-image shift-x shift-y back-image')\n-        return\n-\n-    if len(args) == 2:\n-        image = do_front(args[0], args[1])\n-        image.show()\n-\n-    if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n-\n-if __name__ == '__main__':\n-    main()\n+            pixel = image.get_pixel(x,\n+\"\"\"",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0702 - Raising str while only classes or instances are allowed": {
+        "diff": "--- \n+++ \n@@ -1 +1,5 @@\n-        raise \"Width is zero\"  # Raising a string exception (W0701)\n+\"\"\"\n+Module docstring\n+\"\"\"\n+\n+raise ValueError(\"Width is zero\")  # Raising a ValueError exception (W0701)",
+        "start_line": 66,
+        "end_line": 66
+    }
+}

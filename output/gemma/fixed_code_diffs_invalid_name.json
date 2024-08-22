@@ -1,0 +1,7 @@
+{
+    "C0103 - Function name \"doBack\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1 +1,11 @@\n-def doBack(front_filename, shift_x, shift_y, back_filename):\n+\"\"\"\n+Do back processing on an image.\n+\n+Args:\n+    front_filename: Path to the front image file.\n+    shift_x: Shift value in the X direction.\n+    shift_y: Shift value in the Y direction.\n+    back_filename: Path to the back image file.\n+\n+Returns:\n+    A tuple containing the path to the saved back image and the transformation parameters.",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

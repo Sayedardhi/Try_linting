@@ -1,0 +1,7 @@
+{
+    "C0112 - Empty function docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,15 @@\n+\"\"\"\n+do_back: A function that performs some operation on input files.\n+\n+Parameters:\n+    front_filename (str): The name of the front file.\n+    shift_x (int): An integer representing some x-shift value.\n+    shift_y (int): An integer representing some y-shift value.\n+    back_filename (str): The name of the back file.\n+\n+Returns:\n+    None\n+\"\"\"\n def do_back(front_filename, shift_x, shift_y, back_filename):\n+    # Your code here\n+    pass  # Replace with your implementation",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

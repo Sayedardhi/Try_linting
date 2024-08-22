@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: ''(' was never closed (E0001-syntax_error, line 110)'": {
+        "diff": "--- \n+++ \n@@ -1 +1,35 @@\n-    main(\n+ \"\"\"\n+\n+        # pylint: disable=E0011, R0914\n+        if len(args) != 2:\n+            self.log(\"ERROR\", f\"Incorrect number of arguments for command {self.command}.\"\n+                \"Please see help text for details.\")\n+            return\n+        \n+        try:\n+            code = self.get_code_from_path(args[0]) # pylint: disable=E1101\n+        except Exception as e:\n+            self.log(\"ERROR\", f\"An exception occured while trying to get the original code.\\n{e}\")\n+            return\n+\n+        try:\n+            report = self.lint(code) # pylint: disable=E1101\n+        except Exception as e:\n+            self.log(\"ERROR\", f\"An exception occured while trying to lint the original code.\\n{e}\")\n+            return\n+        \n+        if \"messages\" in report and len(report[\"messages\"]) > 0:\n+            msg_list = []\n+\n+            for message in report[\"messages\"]:\n+                # pylint: disable=C1801\n+                msg_list.append(f\"{message['symbol']}: {message['line']}:\"\n+                    f\"{message['column']}: {message['msg']}\")\n+            \n+            self.log(\"ERROR\", \"\\n\".join(msg_list))\n+\n+        self.send_response(\"\\n\".join([\n+            # pylint: disable=C1801\n+            code,\n+            \"\"])\n+        )",
+        "start_line": 110,
+        "end_line": null
+    }
+}

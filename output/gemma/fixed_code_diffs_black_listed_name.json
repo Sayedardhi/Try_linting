@@ -1,0 +1,7 @@
+{
+    "C0104 - Disallowed name \"foo\"": {
+        "diff": "--- \n+++ \n@@ -1 +1,20 @@\n-    foo = SimpleImage(front_filename)\n+```python\n+\"\"\"\n+SimpleImage module\n+\n+This module provides utilities for working with SimpleImage objects.\n+\"\"\"\n+\n+from .image import SimpleImage\n+\n+def foo(front_filename):\n+    \"\"\"\n+    Creates a SimpleImage object from the front_filename.\n+\n+    Args:\n+        front_filename: The filename of the front image.\n+\n+    Returns:\n+        A SimpleImage object representing the front image.\n+    \"\"\"\n+    return SimpleImage(front_filename)",
+        "start_line": 60,
+        "end_line": 60
+    }
+}

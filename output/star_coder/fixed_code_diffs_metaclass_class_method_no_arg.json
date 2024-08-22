@@ -1,0 +1,7 @@
+{
+    "C0204 - Metaclass class method create_instance should have 'mcs' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,2 @@\n-    def create_instance(not_cls, cls, filename):\n+\n+```",
+        "start_line": 25,
+        "end_line": 25
+    }
+}

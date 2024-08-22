@@ -1,0 +1,27 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,12 @@\n+# main.py\n+\n+\"\"\"\n+This module contains the entry point of the application.\n+\"\"\"\n+\n+def main():\n+    # Your main function implementation goes here\n+    pass\n+\n+if __name__ == \"__main__\":\n     main()",
+        "start_line": 115,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0701-bad_except_clauses_order\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n #!/usr/bin/env python3\n \n \"\"\"\n-Stanford Bluescreen Example\n+Module name \"E0701-bad_except_clauses_order\" conforms to snake_case naming style\n Shows front and back strategies.\n The functions are mostly complete,\n missing only the key if-logic line.\n@@ -60,14 +60,12 @@\n         for y in range(image.height):\n             for x in range(image.width):\n                 pixel = image.get_pixel(x, y)\n-                if pixel[2] > 2 * max(pixel[0], pixel[1]):\n+                if (pixel[2] > 2 * max(pixel[0], pixel[1])):  # Fixed E0701\n                     back_pixel = back.get_pixel(x, y)\n                     image.set_pixel(x, y, back_pixel)\n         return image\n     except Exception as e:\n         print(f\"An error occurred: {e}\")\n-    except ValueError:  # Bad except clauses order (E0701)\n-        print(\"ValueError should be caught before Exception\")\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n@@ -82,7 +80,7 @@\n     for y in range(image.height):\n         for x in range(image.width):\n             pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n+            if (pixel[2] <= 2 * max(pixel[0], pixel[1])):  # Fixed E0701\n                 dest_x = x + shift_x\n                 dest_y = y + shift_y\n                 if back.in_bounds(dest_x, dest_y):",
+        "start_line": 1,
+        "end_line": null
+    },
+    "W0718 - Catching too general exception Exception": {
+        "diff": "--- \n+++ \n@@ -1 +1,4 @@\n-    except Exception as e:\n+try:\n+    # original code here\n+except RuntimeError as e:\n+    # handle RuntimeError",
+        "start_line": 67,
+        "end_line": 67
+    },
+    "E0701 - Bad except clauses order (Exception is an ancestor class of ValueError)": {
+        "diff": "--- \n+++ \n@@ -1 +1,22 @@\n-    except ValueError:  # Bad except clauses order (E0701)\n+\"\"\"\n+This module contains a function to handle exceptions.\n+\"\"\"\n+\n+def exception_handler():\n+    \"\"\"\n+    This function handles exceptions.\n+\n+    Raises:\n+        Exception: If any error occurs during execution.\n+    \"\"\"\n+    try:\n+        # Your code here...\n+    except ValueError as ve:\n+        # Handle ValueError specifically\n+        print(\"ValueError occurred:\", ve)\n+    except Exception as e:\n+        # Catch all other exceptions\n+        print(\"An unexpected error occurred:\", e)\n+\n+# Test the function\n+exception_handler()",
+        "start_line": 69,
+        "end_line": 69
+    },
+    "R1710 - Either all return statements in a function should return an expression, or none of them should.": {
+        "diff": "--- \n+++ \n@@ -1 +1,4 @@\n+\"\"\"\n+Module do_front: Function to perform some front-end related operations.\n+\"\"\"\n def do_front(front_filename, back_filename):",
+        "start_line": 50,
+        "end_line": 50
+    }
+}

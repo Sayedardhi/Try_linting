@@ -1,0 +1,22 @@
+{
+    "C0301 - Line too long (132/100)": {
+        "diff": "--- \n+++ \n@@ -1,4 +1,15 @@\n-        logging.info(\"Image loaded with dimensions %$dx%d\", self.width, self.height)  # Unsupported logging format character (E1200)\n+\"\"\"\n+Module description: This module contains functions to process images using two different strategies (front and back).\n+\"\"\"\n+\n+import sys\n+\n+logging.basicConfig(level=logging.INFO)\n+\n+class SimpleImage:\n+    def __init__(self, filename):\n+        # Initialize image class variables here if needed\n+        pass\n \n     def get_pixel(self, x, y):\n         \"\"\"\n@@ -31,6 +42,7 @@\n     substitute in pixels from back.\n     Return changed front image.\n     \"\"\"\n+    import logging\n     image = SimpleImage(front_filename)\n     back = SimpleImage(back_filename)\n     for y in range(image.height):\n@@ -49,6 +61,7 @@\n     Pixels which fall outside of the background are ignored.\n     Return changed back image.\n     \"\"\"\n+    import logging\n     image = SimpleImage(front_filename)\n     back = SimpleImage(back_filename)\n     for y in range(image.height):\n@@ -65,6 +78,7 @@\n     \"\"\"\n     Main function to handle argument parsing and strategy execution.\n     \"\"\"\n+    import sys\n     args = sys.argv[1:]\n \n     if len(args) != 2 and len(args) != 4:",
+        "start_line": 28,
+        "end_line": null
+    },
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,11 @@\n+\"\"\"\n+main.py: The main entry point of the program.\n+\n+This module contains the main function that gets executed when the program starts.\n+\"\"\"\n+\n+def main():\n+    pass  # Add some functionality here!\n+\n+if __name__ == '__main__':\n     main()",
+        "start_line": 114,
+        "end_line": null
+    },
+    "C0103 - Module name \"E1200-unsupported_logging_format_character\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,5 +1,4 @@\n #!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n@@ -11,12 +10,18 @@\n import logging\n from PIL import Image\n \n-logging.basicConfig(level=logging.INFO)\n+logging.basicConfig(level=logging.INFO, format='%(message)s')  # Fixed unsupported logging format character (E1200)\n+\n+module_docstring = \"\"\"This module provides an example of front and back strategies for image manipulation.\"\"\"\n+__package__ = \"Stanford Bluescreen Example\"\n+\"\"\"{module_docstring}\"\"\"\n+\"\"\"\n \n class SimpleImage:\n     \"\"\"\n     A wrapper class for PIL Image to facilitate pixel manipulation.\n     \"\"\"\n+\n     def __init__(self, filename):\n         \"\"\"\n         Initialize the SimpleImage with a given filename.\n@@ -25,7 +30,7 @@\n         self.image = Image.open(filename)\n         self.pixels = self.image.load()\n         self.width, self.height = self.image.size\n-        logging.info(\"Image loaded with dimensions %$dx%d\", self.width, self.height)  # Unsupported logging format character (E1200)\n+        logging.info(\"Image loaded with dimensions %dx%d\", self.width, self.height)  # Fixed unsupported logging format character (E1200)\n \n     def get_pixel(self, x, y):\n         \"\"\"\n@@ -71,7 +76,7 @@\n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n     Back strategy: loop over image,\n-    detect *non-blue* pixels.\n+    detect non-blue pixels.\n     Copy those pixels to back, shifted by shift_x, shift_y.\n     Pixels which fall outside of the background are ignored.\n     Return changed back image.",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E1200 - Unsupported logging format character '$' (0x24) at index 30": {
+        "diff": "--- \n+++ \n@@ -1 +1 @@\n-        logging.info(\"Image loaded with dimensions %$dx%d\", self.width, self.height)  # Unsupported logging format character (E1200)\n+logging.info(\"Image loaded with dimensions %d x %d\", self.width, self.height)",
+        "start_line": 28,
+        "end_line": 28
+    }
+}

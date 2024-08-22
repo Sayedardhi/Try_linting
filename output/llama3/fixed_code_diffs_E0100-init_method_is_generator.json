@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: 'invalid syntax (E0100-init_method_is_generator, line 43)'": {
+        "diff": "--- \n+++ \n@@ -1,10 +1,39 @@\n-        return 0 <= x < self.width and 0 <= y < self height\n+\"\"\"\n+Image processing module.\n+\"\"\"\n+import sys\n \n-    def show(self):\n-        \"\"\"\n-        Display the image.\n-        \"\"\"\n-        self.image.show()\n+class SimpleImage:\n+    def __init__(self, filename):\n+        pass\n+\n+    def get_pixel(self, x, y):\n+        pass\n+\n+    def set_pixel(self, x, y, pixel):\n+        pass\n+\n+def return_in_bounds(x, self_width, y, self_height):\n+    \"\"\"\n+    Check if the point (x,y) is within the bounds of a rectangle.\n+    The rectangle has width self.width and height self.height.\n+\n+    Args:\n+        x: int\n+        self_width: int\n+        y: int\n+        self_height: int\n+\n+    Returns:\n+        bool\n+    \"\"\"\n+    return 0 <= x < self_width and 0 <= y < self_height\n+\n+def show(self):\n+    \"\"\"\n+    Display the image.\n+    \"\"\"\n+    self.image.show()\n \n def do_front(front_filename, back_filename):\n     \"\"\"\n@@ -39,7 +68,7 @@\n             if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n                 dest_x = x + shift_x\n                 dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n+                if back.in_bounds(dest_x, dest_height):\n                     back.set_pixel(dest_x, dest_y, pixel)\n     return back\n ",
+        "start_line": 43,
+        "end_line": null
+    }
+}

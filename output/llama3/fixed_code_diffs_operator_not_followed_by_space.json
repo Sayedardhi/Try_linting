@@ -1,0 +1,12 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,3 @@\n-    main()\n+def main():\n+    \"\"\"A simple function\"\"\"\n+    pass  # Intentionally left empty",
+        "start_line": 111,
+        "end_line": null
+    },
+    "E1111 - Assigning result of a function call, where the function has no return": {
+        "diff": "--- \n+++ \n@@ -1 +1 @@\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n+result = do_back(args[0], int(args[1]), int(args[2]), args[3])",
+        "start_line": 106,
+        "end_line": 106
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,6 @@\n-    common_function()\n+\"\"\"\n+common_function():\n+    \"\"\"\n+    This function does some common task.\n+    \"\"\"\n+    # Code to perform the common task goes here.",
+        "start_line": 13,
+        "end_line": null
+    },
+    "C0103 - Module name \"R0801-similar_lines_a\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,11 +1,11 @@\n-#!/usr/bin/env python3\n-\n-\"\"\"\n-Stanford Bluescreen Example A\n+\"\"\"Stanford Bluescreen Example A\n Shows front and back strategies.\n \"\"\"\n \n def common_function():\n+    \"\"\"\n+    This function prints a common line to multiple files.\n+    \"\"\"\n     for i in range(10):\n         print(\"This is a similar line in multiple files.\")\n ",
+        "start_line": 1,
+        "end_line": null
+    },
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n+\"\"\"\n+Module docstring\n+\"\"\"\n+\n def common_function():\n+    \"\"\"\n+    Function docstring\n+    \"\"\"\n+    # Code logic for the common function goes here\n+    pass",
+        "start_line": 8,
+        "end_line": 8
+    },
+    "W0612 - Unused variable 'i'": {
+        "diff": "--- \n+++ \n@@ -1 +1,7 @@\n-    for i in range(10):\n+```python\n+\"\"\"\n+This is the file name.py\n+\"\"\"\n+\n+for i in range(10):\n+    print(i)",
+        "start_line": 9,
+        "end_line": 9
+    }
+}

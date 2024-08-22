@@ -1,0 +1,7 @@
+{
+    "C0104 - Disallowed name \"foo\"": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    foo = SimpleImage(front_filename)\n+def load_image(front_filename):\n+    \"\"\"\n+    Load an image from a file.\n+\n+    Args:\n+        front_filename (str): The name of the image file.\n+    Returns:\n+        SimpleImage: A loaded image object.\n+    \"\"\"\n+    return SimpleImage(front_filename)",
+        "start_line": 60,
+        "end_line": 60
+    }
+}

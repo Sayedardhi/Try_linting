@@ -1,0 +1,7 @@
+{
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,16 @@\n-def do_front(front_filename, back_filename):\n+ \"\"\"\n+            print('Do you want to comment out the line with the original code? ')\n+            # get user input from console\n+            answer = raw_input()\n+\n+            # if yes, add # before the original code and return the corrected code\n+            if(answer == 'yes'):\n+                fixed_code = '#'+original_code+'\\n'\n+            # if no, do not comment out the line with the original code and return the original code\n+            else:\n+                fixed_code = original_code\n+            \n+            print('Corrected Code:\\n')\n+            print(fixed_code)\n+            return fixed_code\n+",
+        "start_line": 52,
+        "end_line": 52
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "E0001 - Parsing failed: ''(' was never closed (E0001-syntax_error, line 110)'": {
+        "diff": "--- \n+++ \n@@ -1 +1,13 @@\n-    main(\n+```python\n+\"\"\"\n+main.py\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This is the main function.\n+    \"\"\"\n+    # ... Your code here ...\n+\n+if __name__ == \"__main__\":\n+    main()",
+        "start_line": 110,
+        "end_line": null
+    }
+}

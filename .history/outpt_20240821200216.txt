@@ -1,0 +1,2305 @@
+
+Project Structure:
+/
+    codescope_output.json
+    documentation/
+        missing_docstring.py
+        empty_doctring.py
+    .DS_Store
+    requirements.txt
+    Dockerfile
+    output/
+        pylint_output.json
+    models/
+        star_coder.py
+        llama3_1.py
+        gemma.py
+        ds_coder.py
+        llama3.py
+        base_linter.py
+    cloned_repo/
+        class_method_def/
+            no_cls.py
+            metaclass_method_no_mcs.py
+            metaclass_class_method_no_arg.py
+        documentation/
+            missing_docstring.py
+            empty_doctring.py
+        exceptions_handling/
+            E0710-raising_new_style_class.py
+            E0711-not_implemented_raised.py
+            W0701-raising_string_exception.py
+            E0701-bad_except_clauses_order.py
+            E0704-except_does_nothing.py
+            E0712-catching_invalid_exception.py
+            W0702-no_exception_types_specified.py
+            W0703-catching_too_general_exception.py
+            E0701-raising_improper_types.py
+        syntax_error/
+            E0104-return_outside_function.py
+            E0001-syntax_error.py
+            E0100-init_method_is_generator.py
+            E0101-explicit_return_in_init.py
+            E0103-not_properly_in_loop.py
+            E0102-already_defined.py
+        naming_conventions/
+            black_listed_name.py
+            invalid_name.py
+        logging_and_string_formatting/
+            E1206-not_enough_arguments_logging.py
+            E1200-unsupported_logging_format_character.py
+            E1201-logging_format_string_middle_conversion.py
+            E1205-too_many_arguments_logging.py
+        variable_usage/
+            E0603-undefined_variable_name_in_all.py
+            E0604-invalid_object_in_all.py
+            E0601-using_variable_before_assignment.py
+            E0602-undefined_variable.py
+            E0611-no_name_in_module.py
+        best_practices/
+            R0401-cyclic_import_a.py
+            R0801-similar_lines_a.py
+        structure_layout/
+            operator_not_followed_by_space.py
+            more_than_one_statement.py
+            trailing_whitespace.py
+            C0301-multiple-statements.py
+            C0301-line_too_long.py
+            C0121-comparison.py
+            C0304-final-newline-missing.py
+    scripts/
+        apply_fixes.py
+        run_linter.py
+        codescope_analysis.py
+        stitch_fix_file.py
+    docker-compose.yml
+    main.py
+
+---
+
+File Content:
+Each file's content is presented below, delimited by three `.
+
+
+In main.py:
+```
+# import os
+# import json
+# import subprocess
+# import argparse
+# from scripts.codescope_analysis import run_codescope
+# from scripts.run_linter import run_linter
+# from scripts.apply_fixes import apply_fixes
+
+# def main(file_path=None):
+#     repo_url = 'https://github.com/Sayedardhi/test-linting.git'
+#     clone_dir = 'cloned_repo'
+
+#     if os.path.exists(clone_dir):
+#         subprocess.run(['rm', '-rf', clone_dir])
+
+#     clone_repo(repo_url, clone_dir)
+    
+#     codescope_output = run_codescope(clone_dir)
+#     print(f"CodeScope output: {codescope_output}")
+
+#     if file_path:
+#         files_to_process = [os.path.join(clone_dir, file_path)]
+#     else:
+#         files_to_process = [os.path.join(clone_dir, f) for f in os.listdir(clone_dir) if f.endswith('.py')]
+
+#     for file in files_to_process:
+#         lint_output = run_linter(file)
+#         lint_output_json = json.dumps(lint_output)
+#         print(f"Lint output for {file}: {lint_output_json}")
+
+#         apply_fixes(file, lint_output_json, codescope_output)
+
+# def clone_repo(repo_url, clone_dir):
+#     print(f"Cloning repository from {repo_url} into {clone_dir}")
+#     subprocess.run(['git', 'clone', repo_url, clone_dir])
+
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser(description="Run Linter on a specific file in a GitHub repo")
+#     parser.add_argument('--file', help="File to lint and fix", required=False)
+#     args = parser.parse_args()
+#     main(args.file)
+
+import os
+import json
+import subprocess
+import argparse
+from scripts.codescope_analysis import run_codescope
+from scripts.run_linter import run_linter
+from scripts.apply_fixes import apply_fixes
+
+def main(file_path=None, model_name='llama3', generate_diff_only=False):
+    repo_url = 'https://github.com/Sayedardhi/violations'
+    clone_dir = 'cloned_repo'
+
+    if os.path.exists(clone_dir):
+        subprocess.run(['rm', '-rf', clone_dir])
+
+    clone_repo(repo_url, clone_dir)
+    
+    codescope_output = run_codescope(clone_dir)
+    print(f"CodeScope output: {codescope_output}")
+
+    if file_path:
+        files_to_process = [os.path.join(clone_dir, file_path)]
+    else:
+        # Modified to recursively find all Python files
+        files_to_process = []
+        for root, dirs, files in os.walk(clone_dir):
+            for file in files:
+                if file.endswith('.py'):
+                    files_to_process.append(os.path.join(root, file))
+
+    for file in files_to_process:
+        lint_output = run_linter(file)
+        lint_output_json = json.dumps(lint_output)
+        print(f"Lint output for {file}: {lint_output_json}")
+
+        apply_fixes(file, lint_output_json, codescope_output, model_name, generate_diff_only)
+
+def clone_repo(repo_url, clone_dir):
+    print(f"Cloning repository from {repo_url} into {clone_dir}")
+    subprocess.run(['git', 'clone', repo_url, clone_dir])
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run Linter on a specific file in a GitHub repo")
+    parser.add_argument('--file', help="File to lint and fix", required=False)
+    parser.add_argument('--model', help="Model to use for linting", choices=['llama3', 'llama3_1', 'deep_seek_coder', 'star_coder', 'gemma'], default='llama3')
+    parser.add_argument('--diff-only', action='store_true', help="Generate only diff JSON files without fixing the files")
+    args = parser.parse_args()
+    main(args.file, args.model, args.diff_only)
+```
+
+
+In documentation/missing_docstring.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+
+def do_front(front_filename, back_filename):
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect blue pixels in front and replace with back pixels
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    return image
+
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    # Loop over front image - copy non-blue pixels
+    # to background
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect non-blue pixels and copy to back
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                # Only copy pixels to back if they will be in-bounds
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    # args:
+    # front-image back-image                 - do front strategy
+    # front-image shift-x shift-y back-image - do back strategy
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+
+In documentation/empty_doctring.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect blue pixels in front and replace with back pixels
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    return image
+
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    # Loop over front image - copy non-blue pixels
+    # to background
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect non-blue pixels and copy to back
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                # Only copy pixels to back if they will be in-bounds
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    # args:
+    # front-image back-image                 - do front strategy
+    # front-image shift-x shift-y back-image - do back strategy
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+
+In exceptions_handling/E0710-raising_new_style_class.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+class CustomException:
+    """
+    Custom exception class that doesn't inherit from BaseException.
+    """
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    if image.width == 0:
+        raise CustomException("Width is zero")  # Raising a new style class which doesn’t inherit from BaseException (E0710)
+    return image
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/E0711-not_implemented_raised.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    if image.width == 0:
+        raise NotImplemented  # NotImplemented raised instead of NotImplementedError (E0711)
+    return image
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/W0701-raising_string_exception.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    if image.width == 0:
+        raise "Width is zero"  # Raising a string exception (W0701)
+    return image
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/E0701-bad_except_clauses_order.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    try:
+        image = SimpleImage(front_filename)
+        back = SimpleImage(back_filename)
+        for y in range(image.height):
+            for x in range(image.width):
+                pixel = image.get_pixel(x, y)
+                if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                    back_pixel = back.get_pixel(x, y)
+                    image.set_pixel(x, y, back_pixel)
+        return image
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    except ValueError:  # Bad except clauses order (E0701)
+        print("ValueError should be caught before Exception")
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/E0704-except_does_nothing.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    try:
+        image = SimpleImage(front_filename)
+        back = SimpleImage(back_filename)
+        for y in range(image.height):
+            for x in range(image.width):
+                pixel = image.get_pixel(x, y)
+                if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                    back_pixel = back.get_pixel(x, y)
+                    image.set_pixel(x, y, back_pixel)
+        return image
+    except:
+        pass  # Except doesn’t do anything (W0704)
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/E0712-catching_invalid_exception.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+class InvalidException:
+    """
+    Custom exception class that doesn't inherit from BaseException.
+    """
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    try:
+        image = SimpleImage(front_filename)
+        back = SimpleImage(back_filename)
+        for y in range(image.height):
+            for x in range(image.width):
+                pixel = image.get_pixel(x, y)
+                if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                    back_pixel = back.get_pixel(x, y)
+                    image.set_pixel(x, y, back_pixel)
+        return image
+    except InvalidException as e:  # Catching an exception which doesn’t inherit from BaseException (E0712)
+        print(f"Caught an invalid exception: {e}")
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/W0702-no_exception_types_specified.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    try:
+        image = SimpleImage(front_filename)
+        back = SimpleImage(back_filename)
+        for y in range(image.height):
+            for x in range(image.width):
+                pixel = image.get_pixel(x, y)
+                if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                    back_pixel = back.get_pixel(x, y)
+                    image.set_pixel(x, y, back_pixel)
+        return image
+    except:  # No exception type(s) specified (W0702)
+        print("An error occurred")
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/W0703-catching_too_general_exception.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    try:
+        image = SimpleImage(front_filename)
+        back = SimpleImage(back_filename)
+        for y in range(image.height):
+            for x in range(image.width):
+                pixel = image.get_pixel(x, y)
+                if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                    back_pixel = back.get_pixel(x, y)
+                    image.set_pixel(x, y, back_pixel)
+        return image
+    except Exception as e:  # Catching too general exception (W0703)
+        print(f"An error occurred: {e}")
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In exceptions_handling/E0701-raising_improper_types.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    if image.width == 0:
+        raise "Width is zero"  # Raising improper types (E0702)
+    return image
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+if __name__ == '__main__':
+    main()```
+
+
+In models/star_coder.py:
+```
+
+from .base_linter import BaseLinter
+import ollama
+import re
+
+class StarCoder_linter(BaseLinter):
+    def __init__(self):
+        super().__init__('starcoder')
+
+    def fix_linting(self, code, linter_report):
+        prompt = (
+            f"""
+            You are a post pylint fixer. I will give you the original code, and pylint report, and you have to fix the problems. 
+            Here is the code:
+            {code}
+
+            Here is the pylint report:
+            {linter_report}
+
+            **STRICTLY FOLLOW THE RULES BELOW:**
+            - Do not introduce unrelated code, or unrelated fixes.
+            - Every function should have a docstring. If missing, add a docstring to the function.
+            - Don't uncomment code that is commented out.
+            - Don't just say "insert original code here", actually provide the corrected code.
+            - Don't change the functionality of the code. As in, for example, don't just make a recursive function iterative because you want to when that was not prompted by the linter. 
+            - If a line or variable needs to be removed, clearly indicate it.
+            - Return only the corrected code within the specific markers, and provide a rationale for each change.
+            - Add a module docstring at the beginning of the code if missing, as suggested by the linter. You can use the name of the file as the module name.
+            - If a linting rule requires you to break up a line of code or add a line, please do so.
+            - Do not put random imports that were not part of the original code.
+            - Do not just leave sections of the code to be filled in by the user; fully complete the code.
+            - Do not just disable the linter warning but actually fix it
+            - It is imperative that you do not change the functionality of the code unless directly needed by the linter. So keep most of the code from the original file and fix what's needed. This is imperative, as the code is being linted for a specific purpose, and changing the functionality could have unintended consequences.
+            Return the response in the following format:
+            ```python
+            <corrected code>
+            ```
+            """
+        )
+
+        print(f"Sending request to {self.model_name} model with prompt:\n{prompt}")
+        try:
+            response = ollama.chat(model=self.model_name, messages=[
+                {
+                    'role': 'user',
+                    'content': prompt,
+                },
+            ])
+            print(f"Response received from {self.model_name} model:\n{response}")
+            return self.extract_corrected_code(response['message']['content'])
+        except Exception as e:
+            print(f"Error with {self.model_name} model: {e}")
+            return ""
+
+    @staticmethod
+    def extract_corrected_code(content):
+        code_block_match = re.search(r'```python\n(.*?)\n```', content, re.DOTALL)
+        if code_block_match:
+            return code_block_match.group(1).strip()
+        return content```
+
+
+In models/llama3_1.py:
+```
+from .base_linter import BaseLinter
+import ollama
+import re
+
+class LLAMA3_1_linter(BaseLinter):
+    def __init__(self):
+        super().__init__('llama3.1')
+
+    def fix_linting(self, code, linter_report):
+        prompt = (
+            f"""
+            You are a post pylint fixer. I will give you the original code, and pylint report, and you have to fix the problems. 
+            Here is the code:
+            {code}
+
+            Here is the pylint report:
+            {linter_report}
+
+            **STRICTLY FOLLOW THE RULES BELOW:**
+            generate new code which will resolve the violation
+            Return the response in the following format:
+            ```python
+            <corrected code>
+            ```
+            """
+        )
+
+        print(f"Sending request to {self.model_name} model with prompt:\n{prompt}")
+        try:
+            response = ollama.chat(model=self.model_name, messages=[
+                {
+                    'role': 'user',
+                    'content': prompt,
+                },
+            ])
+            print(f"Response received from {self.model_name} model:\n{response}")
+            return self.extract_corrected_code(response['message']['content'])
+        except Exception as e:
+            print(f"Error with {self.model_name} model: {e}")
+            return ""
+
+    @staticmethod
+    def extract_corrected_code(content):
+        code_block_match = re.search(r'```python\n(.*?)\n```', content, re.DOTALL)
+        if code_block_match:
+            return code_block_match.group(1).strip()
+        return content
+    
+
+
+    # /- Do not introduce unrelated code, or unrelated fixes.
+    #         - Every function should have a docstring. If missing, add a docstring to the function.
+    #         - Don't uncomment code that is commented out.
+    #         - Don't just say "insert original code here", actually provide the corrected code.
+    #         - Don't change the functionality of the code. As in, for example, don't just make a recursive function iterative because you want to when that was not prompted by the linter. 
+    #         - If a line or variable needs to be removed, clearly indicate it.
+    #         - Return only the corrected code within the specific markers, and provide a rationale for each change.
+    #         - Add a module docstring at the beginning of the code if missing, as suggested by the linter. You can use the name of the file as the module name.
+    #         - If a linting rule requires you to break up a line of code or add a line, please do so.
+    #         - Do not put random imports that were not part of the original code.
+    #         - Do not just leave sections of the code to be filled in by the user; fully complete the code.
+    #         - Do not just disable the linter warning but actually fix it
+    #         - It is imperative that you do not change the functionality of the code unless directly needed by the linter. So keep most of the code from the original file and fix what's needed. 
+    #         This is imperative, as the code is being linted for a specific purpose, and changing the functionality could have unintended consequences.
+    #         “Please rename the disallowed variable name foo to something more appropriate that conforms to Python’s naming conventions. 
+    #         Ensure that all references to this variable are updated throughout the function. Keep the existing logic and structure of the code intact,
+    #         and avoid adding unnecessary docstrings or other changes.”```
+
+
+In models/gemma.py:
+```
+from .base_linter import BaseLinter
+import ollama
+import re
+
+class Gemma_linter(BaseLinter):
+    def __init__(self):
+        super().__init__('Gemma')
+
+    def fix_linting(self, code, linter_report):
+        prompt = (
+            f"""
+            You are a post pylint fixer. I will give you the original code, and pylint report, and you have to fix the problems. 
+            Here is the code:
+            {code}
+
+            Here is the pylint report:
+            {linter_report}
+
+            **STRICTLY FOLLOW THE RULES BELOW:**
+            - Do not introduce unrelated code, or unrelated fixes.
+            - Every function should have a docstring. If missing, add a docstring to the function.
+            - Don't uncomment code that is commented out.
+            - Don't just say "insert original code here", actually provide the corrected code.
+            - Don't change the functionality of the code. As in, for example, don't just make a recursive function iterative because you want to when that was not prompted by the linter. 
+            - If a line or variable needs to be removed, clearly indicate it.
+            - Return only the corrected code within the specific markers, and provide a rationale for each change.
+            - Add a module docstring at the beginning of the code if missing, as suggested by the linter. You can use the name of the file as the module name.
+            - If a linting rule requires you to break up a line of code or add a line, please do so.
+            - Do not put random imports that were not part of the original code.
+            - Do not just leave sections of the code to be filled in by the user; fully complete the code.
+            - Do not just disable the linter warning but actually fix it
+            - It is imperative that you do not change the functionality of the code unless directly needed by the linter. So keep most of the code from the original file and fix what's needed. This is imperative, as the code is being linted for a specific purpose, and changing the functionality could have unintended consequences.
+            Return the response in the following format:
+            ```python
+            <corrected code>
+            ```
+            """
+        )
+
+        print(f"Sending request to {self.model_name} model with prompt:\n{prompt}")
+        try:
+            response = ollama.chat(model=self.model_name, messages=[
+                {
+                    'role': 'user',
+                    'content': prompt,
+                },
+            ])
+            print(f"Response received from {self.model_name} model:\n{response}")
+            return self.extract_corrected_code(response['message']['content'])
+        except Exception as e:
+            print(f"Error with {self.model_name} model: {e}")
+            return ""
+
+    @staticmethod
+    def extract_corrected_code(content):
+        code_block_match = re.search(r'```python\n(.*?)\n```', content, re.DOTALL)
+        if code_block_match:
+            return code_block_match.group(1).strip()
+        return content```
+
+
+In models/ds_coder.py:
+```
+
+from .base_linter import BaseLinter
+import ollama
+import re
+
+class DeepSeekCoder_linter(BaseLinter):
+    def __init__(self):
+        super().__init__('deepseek-coder')
+
+    def fix_linting(self, code, linter_report):
+        prompt = (
+            f"""
+            You are a post pylint fixer. I will give you the original code, and pylint report, and you have to fix the problems. 
+            Here is the code:
+            {code}
+
+            Here is the pylint report:
+            {linter_report}
+
+            **STRICTLY FOLLOW THE RULES BELOW:**
+            - Do not introduce unrelated code, or unrelated fixes.
+            - You are not teaching here or giving long explanations but rather fixing the violations.
+            - Every function should have a docstring. If missing, add a docstring to the function.
+            - Don't uncomment code that is commented out.
+            - Don't just say "insert original code here", actually provide the corrected code.
+            - Don't change the functionality of the code. As in, for example, don't just make a recursive function iterative because you want to when that was not prompted by the linter. 
+            - If a line or variable needs to be removed, clearly indicate it.
+            - Return only the corrected code within the specific markers, and provide a rationale for each change.
+            - Add a module docstring at the beginning of the code if missing, as suggested by the linter. You can use the name of the file as the module name.
+            - If a linting rule requires you to break up a line of code or add a line, please do so.
+            - Do not put random imports that were not part of the original code.
+            - Do not just leave sections of the code to be filled in by the user; fully complete the code.
+            - Do not just disable the linter warning but actually fix it
+            - It is imperative that you do not change the functionality of the code unless directly needed by the linter. So keep most of the code from the original file and fix what's needed. This is imperative, as the code is being linted for a specific purpose, and changing the functionality could have unintended consequences.
+            Return the response in the following format:
+            ```python
+            <corrected code>
+            ```
+            """
+        )
+
+        print(f"Sending request to {self.model_name} model with prompt:\n{prompt}")
+        try:
+            response = ollama.chat(model=self.model_name, messages=[
+                {
+                    'role': 'user',
+                    'content': prompt,
+                },
+            ])
+            print(f"Response received from {self.model_name} model:\n{response}")
+            return self.extract_corrected_code(response['message']['content'])
+        except Exception as e:
+            print(f"Error with {self.model_name} model: {e}")
+            return ""
+
+    @staticmethod
+    def extract_corrected_code(content):
+        code_block_match = re.search(r'```python\n(.*?)\n```', content, re.DOTALL)
+        if code_block_match:
+            return code_block_match.group(1).strip()
+        return content```
+
+
+In models/llama3.py:
+```
+from .base_linter import BaseLinter
+import ollama
+import re
+
+class LLAMA3_linter(BaseLinter):
+    def __init__(self):
+        super().__init__('llama3')
+
+    def fix_linting(self, code, linter_report):
+        prompt = (
+            f"""
+            You are a post pylint fixer. I will give you the original code, and pylint report, and you have to fix the problems. 
+            Here is the code:
+            {code}
+
+            Here is the pylint report:
+            {linter_report}
+
+            **STRICTLY FOLLOW THE RULES BELOW:**
+            - Do not introduce unrelated code, or unrelated fixes.
+            - Every function should have a docstring. If missing, add a docstring to the function.
+            - Don't uncomment code that is commented out.
+            - Don't just say "insert original code here", actually provide the corrected code.
+            - Don't change the functionality of the code. As in, for example, don't just make a recursive function iterative because you want to when that was not prompted by the linter. 
+            - Return only the corrected code within the specific markers, and provide a rationale for each change.
+            - Add a module docstring at the beginning of the code if missing, and is suggested by the linter. You can use the name of the file as the module name.
+            - If a linting rule requires you to break up a line of code or add a line, please do so.
+            - Do not put random imports that were not part of the original code.
+            - Do not just leave sections of the code to be filled in by the user; fully complete the code.
+            - It is imperative that you do not change the functionality of the code unless directly needed by the linter. So keep most of the code from the original file and fix what's needed. This is imperative, as the code is being linted for a specific purpose, and changing the functionality could have unintended consequences.
+            Return the response in the following format:
+            ```python
+            <corrected code>
+            ```
+            """
+        )
+        
+        print(f"Sending request to {self.model_name} model with prompt:\n{prompt}")
+        try:
+            response = ollama.chat(model=self.model_name, messages=[
+                {
+                    'role': 'user',
+                    'content': prompt,
+                },
+            ])
+            print(f"Response received from {self.model_name} model:\n{response}")
+            content = response['message']['content']
+            corrected_code = self.extract_corrected_code(content)
+            return corrected_code
+        except Exception as e:
+            print(f"Error with {self.model_name} model: {e}")
+            return ""
+
+    @staticmethod
+    def extract_corrected_code(content):
+        code_block_match = re.search(r'```python\n(.*?)\n```', content, re.DOTALL)
+        if code_block_match:
+            return code_block_match.group(1).strip()
+        return content```
+
+
+In models/base_linter.py:
+```
+class BaseLinter:
+    def __init__(self, model_name):
+        self.model_name = model_name
+
+    def fix_linting(self, code, linter_report):
+        raise NotImplementedError("Subclasses should implement this!")```
+
+
+In scripts/apply_fixes.py:
+```
+# import json
+# import difflib
+# import os
+# import re
+# from models.llama3 import LLAMA3_linter
+
+# def apply_fixes(file_path, lint_output, codescope_output):
+#     lint_issues = json.loads(lint_output)
+#     diffs = {}
+
+#     for issue in lint_issues:
+#         start_line = issue.get('line')
+#         end_line = issue.get('endLine', start_line)
+#         code_section = get_code_section(file_path, start_line, end_line)
+#         if code_section:
+#             diff = generate_diff(code_section, issue)
+#             if diff:
+#                 diffs[f"{issue['message-id']} - {issue['message']}"] = {
+#                     "diff": diff,
+#                     "start_line": start_line,
+#                     "end_line": end_line
+#                 }
+
+#     save_diffs(file_path, diffs)
+#     stitch_fixed_file(file_path, diffs)
+
+# def get_code_section(file_path, start_line, end_line):
+#     with open(file_path, 'r') as f:
+#         lines = f.readlines()
+#     return ''.join(lines[start_line - 1:end_line])
+
+# def generate_diff(code_section, issue):
+#     linter = LLAMA3_linter()
+#     corrected_code = linter.fix_linting(code_section, issue['message'])
+#     if corrected_code:
+#         diff = difflib.unified_diff(code_section.splitlines(), corrected_code.splitlines(), lineterm='')
+#         return '\n'.join(diff)
+#     return ""
+
+# def save_diffs(file_path, diffs):
+#     output_file = f"output/fixed_code_diffs_{file_path.replace('/', '_')}_diffs.json"
+#     with open(output_file, 'w') as f:
+#         json.dump(diffs, f, indent=4)
+#     print(f"Diffs saved to {output_file}")
+
+# def stitch_fixed_file(file_path, diffs):
+#     with open(file_path, 'r') as f:
+#         original_lines = f.readlines()
+
+#     fixed_lines = original_lines.copy()
+
+#     for issue, diff_data in diffs.items():
+#         if diff_data:
+#             diff_lines = diff_data['diff'].split('\n')
+#             start_line = diff_data['start_line'] - 1
+#             end_line = diff_data['end_line']
+#             corrected_lines = [line[1:] + '\n' for line in diff_lines if line.startswith('+') and not line.startswith('+++')]
+#             fixed_lines[start_line:end_line] = corrected_lines
+
+#     fixed_file_path = file_path.replace('cloned_repo', 'fixed_repo')
+#     os.makedirs(os.path.dirname(fixed_file_path), exist_ok=True)
+#     with open(fixed_file_path, 'w') as f:
+#         f.writelines(fixed_lines)
+
+#     print(f"Fixed file saved to {fixed_file_path}")
+import json
+import difflib
+import os
+import re
+from models.llama3 import LLAMA3_linter
+from models.ds_coder import DeepSeekCoder_linter
+from models.star_coder import StarCoder_linter
+from models.gemma import Gemma_linter
+from models.llama3_1 import LLAMA3_1_linter
+
+def apply_fixes(file_path, lint_output, codescope_output, model_name, generate_diff_only=False):
+    lint_issues = json.loads(lint_output)
+    diffs = {}
+    
+    model_class = {
+        'llama3': LLAMA3_linter,
+        'llama3_1': LLAMA3_1_linter,
+        'deep_seek_coder': DeepSeekCoder_linter,
+        'star_coder': StarCoder_linter,
+        'gemma': Gemma_linter,
+    }[model_name]
+
+    linter = model_class()
+
+    # Filter lint issues to include only those related to the current file
+    file_lint_issues = [issue for issue in lint_issues if issue.get('path') == file_path]
+
+    for issue in file_lint_issues:
+        start_line = issue.get('line')
+        end_line = issue.get('endLine', start_line)
+        code_section = get_code_section(file_path, start_line, end_line)
+        if code_section:
+            diff = generate_diff(code_section, issue, linter)
+            if diff:
+                diffs[f"{issue['message-id']} - {issue['message']}"] = {
+                    "diff": diff,
+                    "start_line": start_line,
+                    "end_line": end_line
+                }
+
+    save_diffs(file_path, diffs, model_name)
+
+    if not generate_diff_only:
+        stitch_fixed_file(file_path, diffs, model_name)
+
+def get_code_section(file_path, start_line, end_line):
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+    return ''.join(lines[start_line - 1:end_line])
+
+def generate_diff(code_section, issue, linter):
+    corrected_code = linter.fix_linting(code_section, issue['message'])
+    if corrected_code:
+        diff = difflib.unified_diff(code_section.splitlines(), corrected_code.splitlines(), lineterm='')
+        return '\n'.join(diff)
+    return ""
+
+def save_diffs(file_path, diffs, model_name):
+    output_dir = f"output/{model_name}"
+    os.makedirs(output_dir, exist_ok=True)
+    output_file = f"{output_dir}/fixed_code_diffs_{os.path.basename(file_path).replace('.py', '')}.json"
+    with open(output_file, 'w') as f:
+        json.dump(diffs, f, indent=4)
+    print(f"Diffs saved to {output_file}")
+
+def stitch_fixed_file(file_path, diffs, model_name):
+    with open(file_path, 'r') as f:
+        original_lines = f.readlines()
+
+    fixed_lines = original_lines.copy()
+
+    for issue, diff_data in diffs.items():
+        if diff_data:
+            diff_lines = diff_data['diff'].split('\n')
+            start_line = diff_data['start_line'] - 1
+            end_line = diff_data['end_line']
+            corrected_lines = [line[1:] + '\n' for line in diff_lines if line.startswith('+') and not line.startswith('+++')]
+            fixed_lines[start_line:end_line] = corrected_lines
+
+    fixed_file_path = file_path.replace('cloned_repo', f'fixed_repo/{model_name}')
+    os.makedirs(os.path.dirname(fixed_file_path), exist_ok=True)
+    with open(fixed_file_path, 'w') as f:
+        f.writelines(fixed_lines)
+
+    print(f"Fixed file saved to {fixed_file_path}")
+```
+
+
+In scripts/run_linter.py:
+```
+import os
+import json
+import subprocess
+import argparse
+
+def run_pylint(target_dir):
+    print(f"Running pylint on {target_dir}")
+    pylint_output = {}
+    
+    for root, dirs, files in os.walk(target_dir):
+        for file in files:
+            if file.endswith(".py"):
+                file_path = os.path.join(root, file)
+                result = subprocess.run(['pylint', file_path, '--output-format=json'], capture_output=True, text=True)
+                pylint_output[file_path] = json.loads(result.stdout)
+    
+    # Pretty-print the JSON output
+    formatted_output = json.dumps(pylint_output, indent=4)
+    
+    with open('output/pylint_output.json', 'w') as f:
+        f.write(formatted_output)
+    
+    print(f"Pylint output saved to output/pylint_output.json")
+
+def clone_repo(repo_url, clone_dir):
+    print(f"Cloning repository from {repo_url} into {clone_dir}")
+    subprocess.run(['git', 'clone', repo_url, clone_dir])
+
+def run_linter(file_path):
+    result = subprocess.run(['pylint', file_path, '--output-format=json'], capture_output=True, text=True)
+    pylint_output = json.loads(result.stdout)
+    return pylint_output
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run Pylint on a GitHub repo")
+    parser.add_argument('repo_url', help="URL of the GitHub repo to clone and lint")
+    args = parser.parse_args()
+    
+    clone_dir = 'cloned_repo'
+    if os.path.exists(clone_dir):
+        subprocess.run(['rm', '-rf', clone_dir])
+    
+    clone_repo(args.repo_url, clone_dir)
+    
+    target_dir = clone_dir
+    os.makedirs('output', exist_ok=True)
+    run_pylint(target_dir)
+```
+
+
+In scripts/codescope_analysis.py:
+```
+import subprocess
+import json
+import re
+
+def run_codescope(target_dir):
+    result = subprocess.run(['codescope', target_dir, '--inspection', '--output-filepath', 'codescope_output.json'], capture_output=True, text=True)
+    print(result.stdout)
+
+    with open('codescope_output.json', 'r') as f:
+        codescope_output = f.read()
+
+    # Process markdown to extract relevant data
+    project_structure = re.search(r'Project Structure:\n(.+?)\n---', codescope_output, re.DOTALL)
+    functions_classes = re.search(r'Key Functions and Classes:\n(.+?)\n---', codescope_output, re.DOTALL)
+
+    return {
+        'project_structure': project_structure.group(1).strip() if project_structure else '',
+        'functions_classes': functions_classes.group(1).strip() if functions_classes else ''
+    }```
+
+
+In scripts/stitch_fix_file.py:
+```
+import json
+import re
+
+def parse_diff(diff):
+    changes = []
+    lines = diff.split('\n')
+    in_hunk = False
+    for line in lines:
+        if line.startswith('@@'):
+            in_hunk = True
+            hunk_info = re.search(r'@@ -(\d+),(\d+) \+(\d+),(\d+) @@', line)
+            if hunk_info:
+                old_start, old_len, new_start, new_len = map(int, hunk_info.groups())
+                changes.append({
+                    'type': 'hunk',
+                    'old_start': old_start,
+                    'old_len': old_len,
+                    'new_start': new_start,
+                    'new_len': new_len,
+                    'old_lines': [],
+                    'new_lines': []
+                })
+        elif in_hunk:
+            if line.startswith('-'):
+                changes[-1]['old_lines'].append(line[1:])
+            elif line.startswith('+'):
+                changes[-1]['new_lines'].append(line[1:])
+            elif line:
+                changes[-1]['old_lines'].append(line)
+                changes[-1]['new_lines'].append(line)
+    return changes
+
+def apply_changes(original_code, changes):
+    original_lines = original_code.split('\n')
+    fixed_lines = original_lines.copy()
+
+    for change in changes:
+        if change['type'] == 'hunk':
+            old_start = change['old_start'] - 1
+            old_end = old_start + change['old_len']
+            new_lines = change['new_lines']
+            fixed_lines[old_start:old_end] = new_lines
+
+    return '\n'.join(fixed_lines)
+
+def stitch_fixed_file(original_file, diff_output_file, output_file):
+    with open(original_file, 'r') as f:
+        original_code = f.read()
+
+    with open(diff_output_file, 'r') as f:
+        diff_output = f.read()
+
+    # Debugging output
+    print(f"Content of diff_output: {diff_output}")
+
+    try:
+        diffs = json.loads(diff_output)
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        return
+
+    fixed_code = original_code
+
+    for key, diff in diffs.items():
+        changes = parse_diff(diff['diff'])
+        fixed_code = apply_changes(fixed_code, changes)
+
+    with open(output_file, 'w') as f:
+        f.write(fixed_code)
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 4:
+        print("Usage: python stitch_fixed_file.py <original_file> <diff_output_file> <output_file>")
+        sys.exit(1)
+    
+    original_file = sys.argv[1]
+    diff_output_file = sys.argv[2]
+    output_file = sys.argv[3]
+    
+    stitch_fixed_file(original_file, diff_output_file, output_file)
+
+```
+
+
+In fixed_repo/llama3_1/no_cls.py:
+```
+#!/usr/bin/env python3
+
+"""
+Stanford Bluescreen Example
+Shows front and back strategies.
+The functions are mostly complete,
+missing only the key if-logic line.
+"""
+
+import sys
+from PIL import Image
+
+
+class SimpleImage:
+    """
+    A wrapper class for PIL Image to facilitate pixel manipulation.
+    """
+    def __init__(self, filename):
+        """
+        Initialize the SimpleImage with a given filename.
+        Load the image and get its size.
+        """
+        self.image = Image.open(filename)
+        self.pixels = self.image.load()
+        self.width, self.height = self.image.size
+
+    def get_pixel(self, x, y):
+        """
+        Get the pixel value at the given (x, y) coordinates.
+        """
+        return self.pixels[x, y]
+
+    def set_pixel(self, x, y, color):
+        """
+        Set the pixel value at the given (x, y) coordinates.
+        """
+        self.pixels[x, y] = color
+
+    def in_bounds(self, x, y):
+        """
+        Check if the given (x, y) coordinates are within the image bounds.
+        """
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def show(self):
+        """
+        Display the image.
+        """
+        self.image.show()
+
+    @classmethod
+    def from_size(cls, width, height):
+        """
+        Create a new SimpleImage of the given size.
+        """
+        instance = cls.__new__(cls)
+        instance.image = Image.new('RGB', (width, height))
+        instance.pixels = instance.image.load()
+        instance.width, instance.height = width, height
+        return instance
+
+    @classmethod
+class PostPylintFixer:
+    """A module for fixing pylint issues."""
+    
+    def post_pylint_fixer(self, width, height):
+        """
+        This function does nothing. It's just here to demonstrate a class method.
+        
+        Args:
+            width (int): The width of something.
+            height (int): The height of something.
+        """
+        pass
+        """
+        This class method should have 'cls' as its first argument.
+        """
+        instance = not_cls.__new__(not_cls)
+        instance.image = Image.new('RGB', (width, height))
+        instance.pixels = instance.image.load()
+        instance.width, instance.height = width, height
+        return instance
+
+
+def do_front(front_filename, back_filename):
+    """
+    Front strategy: loop over front image,
+    detect blue pixels there,
+    substitute in pixels from back.
+    Return changed front image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect blue pixels in front and replace with back pixels
+            if pixel[2] > 2 * max(pixel[0], pixel[1]):
+                back_pixel = back.get_pixel(x, y)
+                image.set_pixel(x, y, back_pixel)
+    return image
+
+
+def do_back(front_filename, shift_x, shift_y, back_filename):
+    """
+    Back strategy: loop over image,
+    detect *non-blue* pixels.
+    Copy those pixels to back, shifted by shift_x, shift_y.
+    Pixels which fall outside of the background are ignored.
+    Return changed back image.
+    """
+    image = SimpleImage(front_filename)
+    back = SimpleImage(back_filename)
+    # Loop over front image - copy non-blue pixels
+    # to background
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.get_pixel(x, y)
+
+            # Detect non-blue pixels and copy to back
+            if pixel[2] <= 2 * max(pixel[0], pixel[1]):
+                dest_x = x + shift_x
+                dest_y = y + shift_y
+                # Only copy pixels to back if they will be in-bounds
+                if back.in_bounds(dest_x, dest_y):
+                    back.set_pixel(dest_x, dest_y, pixel)
+    return back
+
+
+def main():
+    """
+    Main function to handle argument parsing and strategy execution.
+    """
+    args = sys.argv[1:]
+
+    # args:
+    # front-image back-image                 - do front strategy
+    # front-image shift-x shift-y back-image - do back strategy
+
+    if len(args) != 2 and len(args) != 4:
+        print('Args not recognized. Usage:')
+        print('2 args for front strategy:')
+        print('  front-image back-image')
+        print('4 args for back strategy:')
+        print('  front-image shift-x shift-y back-image')
+        return
+
+    if len(args) == 2:
+        image = do_front(args[0], args[1])
+        image.show()
+
+    if len(args) == 4:
+        image = do_back(args[0], int(args[1]), int(args[2]), args[3])
+        image.show()
+
+
+if __name__ == '__main__':
+    main()
+```

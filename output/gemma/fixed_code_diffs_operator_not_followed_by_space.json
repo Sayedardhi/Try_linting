@@ -1,0 +1,12 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,12 @@\n+\"\"\"\n+Main application entry point.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    The main function that runs the application.\n+    \"\"\"\n+    # ... Your application logic goes here ...\n+\n+if __name__ == \"__main__\":\n     main()",
+        "start_line": 111,
+        "end_line": null
+    },
+    "E1111 - Assigning result of a function call, where the function has no return": {
+        "diff": "--- \n+++ \n@@ -1 +1,19 @@\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n+\"\"\"\n+Image processing functions.\n+\"\"\"\n+\n+def do_back(image, width, height, channels):\n+    \"\"\"\n+    Processes an image to apply a background.\n+\n+    Args:\n+        image: The input image.\n+        width: The width of the resulting image.\n+        height: The height of the resulting image.\n+        channels: The number of channels in the image.\n+\n+    Returns:\n+        The processed image.\n+    \"\"\"\n+    # Code to process the image and apply the background.\n+    return processed_image",
+        "start_line": 106,
+        "end_line": 106
+    }
+}

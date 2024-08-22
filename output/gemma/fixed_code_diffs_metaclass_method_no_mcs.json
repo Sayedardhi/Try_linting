@@ -1,0 +1,7 @@
+{
+    "C0203 - Metaclass method create_instance should have 'cls' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,8 @@\n-    def create_instance(not_mcs, cls, filename):\n+\"\"\"\n+Module: create_instance.py\n+\n+\"\"\"\n+\n+def create_instance(cls, not_mcs, filename):\n+    \"\"\"Creates an instance of the given class.\"\"\"\n+    return cls()",
+        "start_line": 24,
+        "end_line": 24
+    }
+}

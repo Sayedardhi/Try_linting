@@ -1,0 +1,7 @@
+{
+    "C0104 - Disallowed name \"foo\"": {
+        "diff": "--- \n+++ \n@@ -1 +1,2 @@\n-    foo = SimpleImage(front_filename)\n+# Create a SimpleImage object with the front image filename\n+image = SimpleImage(front_filename)",
+        "start_line": 60,
+        "end_line": 60
+    }
+}

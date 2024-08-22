@@ -1,0 +1,7 @@
+{
+    "C0112 - Empty function docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,17 @@\n+```python\n+\"\"\"Module docstring\"\"\"\n+\n def do_back(front_filename, shift_x, shift_y, back_filename):\n+    \"\"\"\n+    Function to perform a back transformation on an image.\n+\n+    Args:\n+        front_filename: The path to the front image file.\n+        shift_x: The horizontal shift value.\n+        shift_y: The vertical shift value.\n+        back_filename: The path to the back image file.\n+\n+    Returns:\n+        None\n+    \"\"\"\n+    # Code to perform the back transformation...",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

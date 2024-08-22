@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,9 @@\n-    main()\n+\"\"\"\n+This module contains a main function.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This function is the entry point of the program.\n+    \"\"\"\n+    # Your code here...",
+        "start_line": 112,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0701-raising_improper_types\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n #!/usr/bin/env python3\n \n \"\"\"\n-Stanford Bluescreen Example\n+Module name \"E0701-raising_improper_types\"\n Shows front and back strategies.\n The functions are mostly complete,\n missing only the key if-logic line.\n@@ -62,8 +62,6 @@\n             if pixel[2] > 2 * max(pixel[0], pixel[1]):\n                 back_pixel = back.get_pixel(x, y)\n                 image.set_pixel(x, y, back_pixel)\n-    if image.width == 0:\n-        raise \"Width is zero\"  # Raising improper types (E0702)\n     return image\n \n def do_back(front_filename, shift_x, shift_y, back_filename):\n@@ -105,8 +103,12 @@\n         image.show()\n \n     if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n+        try:\n+            image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n+            image.show()\n+        except ValueError:\n+            print(\"Error: shift_x and shift_y must be integers.\")\n+            return\n \n if __name__ == '__main__':\n     main()",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0702 - Raising str while only classes or instances are allowed": {
+        "diff": "--- \n+++ \n@@ -1 +1,14 @@\n-        raise \"Width is zero\"  # Raising improper types (E0702)\n+class ValueError(Exception):\n+    pass\n+\n+def raise_width_zero():\n+    \"\"\"\n+    Raises ValueError if width is zero.\n+    \n+    Returns:\n+        None\n+    \"\"\"\n+    raise ValueError(\"Width is zero\")\n+\n+# Call the function to test it\n+raise_width_zero()",
+        "start_line": 66,
+        "end_line": 66
+    }
+}

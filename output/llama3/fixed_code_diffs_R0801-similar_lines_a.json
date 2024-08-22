@@ -1,0 +1,22 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,7 @@\n-    common_function()\n+# File docstring (as suggested by the linter)\n+\"\"\"This is the module documentation for common_function.py\"\"\"\n+\n+def common_function():\n+    pass  # Your original function implementation here\n+\n+print()  # Add a final newline as per the linter's suggestion",
+        "start_line": 13,
+        "end_line": null
+    },
+    "C0103 - Module name \"R0801-similar_lines_a\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,11 +1,19 @@\n #!/usr/bin/env python3\n \n \"\"\"\n-Stanford Bluescreen Example A\n-Shows front and back strategies.\n+R0801-similar_lines_a - Stanford Bluescreen Example A Shows front and back strategies.\n+\n+This module demonstrates similar lines of code in multiple files.\n \"\"\"\n \n def common_function():\n+    \"\"\"\n+    This function prints a series of identical lines to the console.\n+    \n+    Args: None\n+    \n+    Returns: None\n+    \"\"\"\n     for i in range(10):\n         print(\"This is a similar line in multiple files.\")\n ",
+        "start_line": 1,
+        "end_line": null
+    },
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,4 @@\n def common_function():\n+    \"\"\"\n+    Brief description of what the function does.\n+    \"\"\"",
+        "start_line": 8,
+        "end_line": 8
+    },
+    "W0612 - Unused variable 'i'": {
+        "diff": "--- \n+++ \n@@ -1 +1,9 @@\n-    for i in range(10):\n+def main():\n+    \"\"\"\n+    This function demonstrates a simple loop.\n+    \"\"\"\n+    for _ in range(10):\n+        pass  # You can add some meaningful code here\n+\n+if __name__ == \"__main__\":\n+    main()",
+        "start_line": 9,
+        "end_line": 9
+    }
+}

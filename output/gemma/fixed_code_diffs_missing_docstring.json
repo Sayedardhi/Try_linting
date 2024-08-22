@@ -1,0 +1,7 @@
+{
+    "C0116 - Missing function or method docstring": {
+        "diff": "--- \n+++ \n@@ -1 +1,15 @@\n+```python\n+\"\"\"\n+Module docstring for the do_front function.\n+\"\"\"\n+\n def do_front(front_filename, back_filename):\n+    \"\"\"\n+    Docstring for the do_front function.\n+\n+    Args:\n+        front_filename: The filename of the front file.\n+        back_filename: The filename of the back file.\n+    \"\"\"\n+\n+    # Code to process the front and back files.",
+        "start_line": 52,
+        "end_line": 52
+    }
+}

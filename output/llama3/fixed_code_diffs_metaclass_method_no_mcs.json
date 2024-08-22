@@ -1,0 +1,7 @@
+{
+    "C0203 - Metaclass method create_instance should have 'cls' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,12 @@\n-    def create_instance(not_mcs, cls, filename):\n+def create_instance(mcs=None, cls=None, filename=None):\n+    \"\"\"\n+    This function creates an instance of a class.\n+\n+    Args:\n+        mcs (object): The meta class.\n+        cls (class): The class to instantiate.\n+        filename (str): The name of the file.\n+\n+    Returns:\n+        object: An instance of the class.\n+    \"\"\"",
+        "start_line": 24,
+        "end_line": 24
+    }
+}

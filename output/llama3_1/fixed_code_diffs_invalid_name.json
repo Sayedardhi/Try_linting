@@ -1,0 +1,7 @@
+{
+    "C0103 - Function name \"doBack\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1 +1,21 @@\n-def doBack(front_filename, shift_x, shift_y, back_filename):\n+\"\"\"\n+This module contains functions to perform image registration.\n+\n+The doBack function registers an image to another, where the first image is shifted by (shift_x, shift_y)\n+from its original position.\n+\"\"\"\n+\n+def do_back(front_filename, shift_x, shift_y, back_filename):\n+    \"\"\"\n+    Register an image to another, where the first image is shifted by (shift_x, shift_y) from its original position.\n+\n+    Parameters:\n+        front_filename (str): The filename of the front image.\n+        shift_x (int): The x-coordinate of the shift.\n+        shift_y (int): The y-coordinate of the shift.\n+        back_filename (str): The filename of the background image.\n+\n+    Returns:\n+        None\n+    \"\"\"\n+    # Your original function code here...",
+        "start_line": 72,
+        "end_line": 72
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "C0204 - Metaclass class method create_instance should have 'mcs' as first argument": {
+        "diff": "--- \n+++ \n@@ -1 +1,6 @@\n-    def create_instance(not_cls, cls, filename):\n+def create_instance(not_cls, cls):  # updated param name from mcs to cls for pylint's error message.  \n+    \"\"\"    \n+    Create an instance of a class using the provided arguments and metadata classes (mcs). This is necessary because Python does not allow mixing between different versions or architectures via metaclasses, which can cause issues when dealing with inheritance trees in complex scenarios like Duck Typing based object comparison. \n+    >>> create_instance(obj1(), obj2()) # should work without any problems as it's a class method called directly from the instance itself and not inherited by another classes or instances of other metaclasses, while mcs is trying to call this on an already instantiated meta-class. \n+    >>> create_instance(obj1(), MyMeta) # This line should be fixed because we are attempting a direct class invocation from the instance itself which was not allowed in pylint error message about mixing different versions/ architectures via metaclasses, and also when it's instructed to do so.\n+    \"\"\"",
+        "start_line": 25,
+        "end_line": 25
+    }
+}

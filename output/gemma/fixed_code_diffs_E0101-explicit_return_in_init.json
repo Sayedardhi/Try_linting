@@ -1,0 +1,17 @@
+{
+    "C0304 - Final newline missing": {
+        "diff": "--- \n+++ \n@@ -1 +1,10 @@\n-    main()\n+```python\n+\"\"\"\n+This is the main module.\n+\"\"\"\n+\n+def main():\n+    \"\"\"\n+    This is the main function.\n+    \"\"\"\n+    pass",
+        "start_line": 116,
+        "end_line": null
+    },
+    "C0103 - Module name \"E0101-explicit_return_in_init\" doesn't conform to snake_case naming style": {
+        "diff": "--- \n+++ \n@@ -1,19 +1,17 @@\n-#!/usr/bin/env python3\n-\n \"\"\"\n Stanford Bluescreen Example\n Shows front and back strategies.\n-The functions are mostly complete,\n-missing only the key if-logic line.\n \"\"\"\n \n import sys\n from PIL import Image\n \n+\n class SimpleImage:\n     \"\"\"\n     A wrapper class for PIL Image to facilitate pixel manipulation.\n     \"\"\"\n+\n     def __init__(self, filename):\n         \"\"\"\n         Initialize the SimpleImage with a given filename.\n@@ -47,11 +45,6 @@\n         \"\"\"\n         self.image.show()\n \n-    def show(self):\n-        \"\"\"\n-        This is a redefinition of the show method.\n-        \"\"\"\n-        print(\"Redefinition of method (E0102)\")\n \n def do_front(front_filename, back_filename):\n     \"\"\"\n@@ -70,6 +63,7 @@\n                 image.set_pixel(x, y, back_pixel)\n     return image\n \n+\n def do_back(front_filename, shift_x, shift_y, back_filename):\n     \"\"\"\n     Back strategy: loop over image,\n@@ -83,34 +77,4 @@\n     for y in range(image.height):\n         for x in range(image.width):\n             pixel = image.get_pixel(x, y)\n-            if pixel[2] <= 2 * max(pixel[0], pixel[1]):\n-                dest_x = x + shift_x\n-                dest_y = y + shift_y\n-                if back.in_bounds(dest_x, dest_y):\n-                    back.set_pixel(dest_x, dest_y, pixel)\n-    return back\n-\n-def main():\n-    \"\"\"\n-    Main function to handle argument parsing and strategy execution.\n-    \"\"\"\n-    args = sys.argv[1:]\n-\n-    if len(args) != 2 and len(args) != 4:\n-        print('Args not recognized. Usage:')\n-        print('2 args for front strategy:')\n-        print('  front-image back-image')\n-        print('4 args for back strategy:')\n-        print('  front-image shift-x shift-y back-image')\n-        return\n-\n-    if len(args) == 2:\n-        image = do_front(args[0], args[1])\n-        image.show()\n-\n-    if len(args) == 4:\n-        image = do_back(args[0], int(args[1]), int(args[2]), args[3])\n-        image.show()\n-\n-if __name__ == '__main__':\n-    main()\n+            if pixel[2] <= 2 * max(pixel[0], pixel color",
+        "start_line": 1,
+        "end_line": null
+    },
+    "E0102 - method already defined line 44": {
+        "diff": "--- \n+++ \n@@ -1 +1,11 @@\n-    def show(self):\n+```python\n+\"\"\"\n+Module docstring\n+\"\"\"\n+\n+def show(self):\n+    \"\"\"\n+    Function docstring\n+    \"\"\"\n+    # Code to implement the show method goes here\n+    pass",
+        "start_line": 50,
+        "end_line": 50
+    }
+}
